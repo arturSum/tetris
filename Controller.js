@@ -63,7 +63,7 @@ class Controller{
         this.elapsedTetrinoCounter++;
 
         this.gameStatus.drawNextTetrino(this.nextTetrino.shape);
-        
+
         this.runAnimation = true;
         this.updateData((new Date()).getTime());
 
@@ -90,29 +90,29 @@ class Controller{
         window.addEventListener('keydown', event=>{
 
             if(!this.runAnimation){
-                return;
-            }
+            return;
+        }
 
-            switch(event.keyCode){
+        switch(event.keyCode){
 
-                case 37: //left
-                    this.moveBlockOnXAxis(-1);
-                    break;
+            case 37: //left
+                this.moveBlockOnXAxis(-1);
+                break;
 
-                case 39: //right
-                    this.moveBlockOnXAxis(1);
-                    break;
+            case 39: //right
+                this.moveBlockOnXAxis(1);
+                break;
 
-                case 40: //down
-                    this.moveBlockOnYAxis();
-                    break;
+            case 40: //down
+                this.moveBlockOnYAxis();
+                break;
 
-                case 32: //space
-                    this.rotateBlockWithCertainDirection('right');
-                    break;
+            case 32: //space
+                this.rotateBlockWithCertainDirection('right');
+                break;
 
-            }
-        });
+        }
+    });
 
         return this;
     }
@@ -121,7 +121,7 @@ class Controller{
     rotateBlockWithCertainDirection(direction){
         this.gameBoard.rotateBlock(direction);
     }
-    
+
 
     moveBlockOnXAxis(movingStep){
         this.gameBoard.changeXAxisBlockPosition(movingStep);
@@ -136,14 +136,14 @@ class Controller{
 
     getNextTetrino(){
 
-       var currentTetrino = this.nextTetrino;
+        var currentTetrino = this.nextTetrino;
 
-       this.nextTetrino = this.getNewTetrino();
-       this.gameStatus.drawNextTetrino(this.nextTetrino.shape);
+        this.nextTetrino = this.getNewTetrino();
+        this.gameStatus.drawNextTetrino(this.nextTetrino.shape);
 
         this.elapsedTetrinoCounter++;
 
-       return currentTetrino;
+        return currentTetrino;
     }
 
     getNewTetrino(){
@@ -154,9 +154,9 @@ class Controller{
 
         if(this.elapsedTetrinoCounter == this.changingTetrinoSpeedInterval){
 
-           if(this.dropInterval <= 50){
-               return;
-           }
+            if(this.dropInterval <= 50){
+                return;
+            }
 
             this.dropInterval -= this.tetrinoSpeedRising;
             this.elapsedTetrinoCounter = 0;
@@ -190,17 +190,17 @@ class Controller{
         setTimeout(()=>{
 
             this.gameStatus.clearNextTetrinoSurface();
-            this.gameBoard.clearMesh();
-            this.gameBoard.clearSurface();
+        this.gameBoard.clearMesh();
+        this.gameBoard.clearSurface();
 
-            this.gameStatus.updateScoreNode();
-            this.gameStatus.setStartButtonDisabledStatus(false);
+        this.gameStatus.updateScoreNode();
+        this.gameStatus.setStartButtonDisabledStatus(false);
 
-            this.gameBoard.showGameOverInfo(['GAME OVER', `Your score: ${this.score}`]);
-            this.eventListener.notifyObservers(`${this.gameIdString}_End`);
+        this.gameBoard.showGameOverInfo(['GAME OVER', `Your score: ${this.score}`]);
+        this.eventListener.notifyObservers(`${this.gameIdString}_End`);
 
-        }, 50);
-       
+    }, 50);
+
     }
 
     updateData(lastTime){
@@ -221,11 +221,11 @@ class Controller{
             this.elapsedTime = 0;
         }
 
-         this.gameBoard.drawOnSurface();
+        this.gameBoard.drawOnSurface();
 
-         this.rafId = requestAnimationFrame(()=>{
+        this.rafId = requestAnimationFrame(()=>{
                 this.updateData(time);
-         });
+    });
 
     }
 
@@ -245,6 +245,6 @@ class Controller{
         this.gameBoard.createMesh();
         return this;
     }
-    
+
 
 }
