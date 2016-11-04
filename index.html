@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tetris</title>
+
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="main.css" />
+</head>
+<body>
+
+    <div id="gameBox">
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="gameBoardContainer col-md-4">
+                     <canvas class="gameBoard">You browser not support canvas element</canvas>
+                </div>
+
+                <div class="gameStatusContainer col-md-2">
+
+                    <div class="nextShapeContainer">
+                        <h3><span class="label label-success">Next</span></h3>
+                        <canvas class="nextShape"></canvas>
+                    </div>
+
+                    <div  class="scoreContainer">
+                        <h3><span class="label label-success">Score</span></h3>
+                        <h1 class="score"></h1>
+                    </div>
+
+                    <div class="btn-group btn-group-justified buttonContainer" role="group">
+                        <button type="button" class="startButton btn btn-primary">Start</button>
+                    </div>
+
+                </div>
+
+            </div>
+
+         </div>
+
+    </div>
+
+    <!-- element opcjonalny -->
+    <script type="text/javascript" src="EventEmitter.js"></script>
+    <script type="text/javascript" src="GameObserver.js"></script>
+
+    <script type="text/javascript" src="TetrinoFactory.js"></script>
+    <script type="text/javascript" src="GameBoard.js"></script>
+    <script type="text/javascript" src="GameStatus.js"></script>
+    <script type="text/javascript" src="Controller.js"></script>
+
+    <script type="text/javascript" src="Tetris.js"></script>
+
+    <script type="text/javascript">
+
+            var configuration = {
+
+                    //minimum 200px
+                    surfaceWidth : 400,
+                    containerId : 'gameBox',
+
+                    //opcjonalnie - z ich standardowymi ustawieniami w klasie Controller
+                    //dropInterval : 1000,
+                    //tetrinoSpeedRising : 50,
+                    //changingTetrinoSpeedInterval : 10
+
+                 };
+
+            var myModule = new Tetris();
+                myModule.set(configuration, EventEmitter);
+
+            //wartosci opcjonalne - rejestrujemy obserwatora dla zdarzen w grze
+            EventEmitter.subscribe('Tetris_gameBox_Start', gameObserver);
+            EventEmitter.subscribe('Tetris_gameBox_End', gameObserver);
+
+    </script>
+
+
+
+
+
+
+
+</body>
+</html>

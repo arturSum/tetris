@@ -1,0 +1,133 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+
+#gameBox .gameBoardContainer{
+    /*outline : 1px orange solid;*/
+}
+#gameBox .nextShapeContainer{
+    /*outline : 1px blue solid;*/
+}
+
+#gameBox .scoreContainer{
+    /*outline : 1px red solid;*/
+}
+
+
+
+
+#gameBox .gameBoardContainer{
+
+    border : 3px solid blue;
+    border-radius: 15px;
+
+    padding: 10px 10px 8px 10px;
+
+    width:428px;
+
+
+
+
+}
+
+#gameBox .gameStatusContainer{
+
+    margin-left: 20px;
+
+}
+
+#gameBox .nextShapeContainer{
+
+    overflow: hidden;
+
+    width: 140px;
+    height: 0;
+
+    /* 140 */
+
+    transition: height 0.3s;
+
+}
+
+#gameBox .nextShapeContainer.start{
+
+    height : 140px;
+
+}
+
+
+
+
+#gameBox .nextShapeContainer h3 span{
+
+    display: block;
+    width: inherit;
+
+}
+
+
+#gameBox .scoreContainer h3 span{
+
+    display: block;
+    width: inherit;
+
+}
+
+
+
+
+
+
+#gameBox .scoreContainer{
+
+    width: 140px;
+    text-align: center;
+
+    height: 0;
+
+    transition: height 0.3s;
+
+}
+
+
+#gameBox .scoreContainer.start{
+
+    width: 140px;
+    text-align: center;
+
+    height: inherit;
+
+
+}
+
+
+
+
+
+
+
+#gameBox .scoreContainer .score{
+
+
+    height: 45px;
+    text-align: center;
+
+    color: red;
+
+}
+
+
+
+
+#gameBox .buttonContainer{
+
+
+
+
+}
+
+#gameBox .gameStatusContainer button{
+    width: 140px;
+}
