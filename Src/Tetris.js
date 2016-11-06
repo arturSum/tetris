@@ -75,8 +75,6 @@ var Tetris = ((global)=>{
 
         this.set = (...config)=>{
 
-            global.addEventListener('load', ()=>{
-
                 var [correctSettingsFlag = false, settings, eventListener] = checkCorrectConfigProp(config);
 
                 if(!correctSettingsFlag){
@@ -98,9 +96,7 @@ var Tetris = ((global)=>{
                                    createGameStatusBoard().
                                    createGameBoardMesh().
                                    setBlockMovingEvents();
-
-
-            });
+            
 
         };
 
