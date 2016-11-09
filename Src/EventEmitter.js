@@ -66,3 +66,4 @@ const EventEmitter = (() => {
 
 })();
 
+export {EventEmitter};

@@ -9,7 +9,8 @@
 </head>
 <body>
 
-    <div id="gameBox">
+
+    <div id="gameBox" class="spinner">
 
         <div class="container">
 
@@ -43,45 +44,39 @@
 
     </div>
 
-    <!-- element opcjonalny -->
-    <script type="text/javascript" src="Src/EventEmitter.js"></script>
-    <script type="text/javascript" src="Src/GameObserver.js"></script>
 
-    <script type="text/javascript" src="Src/core/TetrinoFactory.js"></script>
-    <script type="text/javascript" src="Src/core/GameBoard.js"></script>
-    <script type="text/javascript" src="Src/core/GameStatus.js"></script>
-    <script type="text/javascript" src="Src/core/Controller.js"></script>
-
-    <script type="text/javascript" src="Src/Tetris.js"></script>
+    <script type="text/javascript" src="node_modules/steal/steal.js" data-main="@empty"></script>
 
     <script type="text/javascript">
 
-            var configuration = {
+        window.addEventListener('load', function(){
 
-                    //minimum 200px
-                    surfaceWidth : 400,
-                    containerId : 'gameBox'
+            var config = {
+                surfaceWidth : 400,
+                containerId : 'gameBox'
+            };
 
-                    //opcjonalnie - z ich standardowymi ustawieniami w klasie Controller
-                    //dropInterval : 1000,
-                    //tetrinoSpeedRising : 50,
-                    //changingTetrinoSpeedInterval : 10
+            var eventsListenerConfig =  {
 
-                 };
+                eventEmitter : 'Src/EventEmitter',
+                eventObserver : 'Src/GameObserver',
+                actionsName : ['Tetris_gameBox_Start', 'Tetris_gameBox_End', 'Tetris_gameBox_ReadyToStart']
+            };
 
-            var myModule = new Tetris();
-                myModule.set(configuration, EventEmitter);
 
-            //wartosci opcjonalne - rejestrujemy obserwatora dla zdarzen w grze
-            EventEmitter.subscribe('Tetris_gameBox_Start', gameObserver);
-            EventEmitter.subscribe('Tetris_gameBox_End', gameObserver);
+            System.import('Src/Bootstrap').then(function(module){
+
+                var game = new module.Bootstrap();
+
+                game.setParams(config);
+                game.setEventsListener(eventsListenerConfig);
+                game.run();
+
+            })
+
+        });
 
     </script>
-
-
-
-
-
 
 
 </body>

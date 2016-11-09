@@ -1,3 +1,7 @@
+import GameBoard from './GameBoard';
+import GameStatus from './GameStatus';
+import TetrinoFactory from './TetrinoFactory';
+
 
 
 class Controller{
@@ -7,10 +11,16 @@ class Controller{
 
         var gameStep = config.surfaceWidth/20;
 
-
         this.gameIdString = `Tetris_${config.containerId}`;
 
-        this.eventListener = eventListener;
+
+        console.log(config.containerId);
+
+
+
+
+
+        this.eventListener = eventListener ;
         this.nextTetrino = null;
 
         this.score = 0;
@@ -162,10 +172,6 @@ class Controller{
             this.elapsedTetrinoCounter = 0;
 
             this.tetrinoScoreVelocity += 1;
-
-
-            console.log(this.dropInterval);
-
         }
 
     }
@@ -189,7 +195,7 @@ class Controller{
 
         setTimeout(()=>{
 
-            this.gameStatus.clearNextTetrinoSurface();
+        this.gameStatus.clearNextTetrinoSurface();
         this.gameBoard.clearMesh();
         this.gameBoard.clearSurface();
 
@@ -248,3 +254,5 @@ class Controller{
 
 
 }
+
+export {Controller};

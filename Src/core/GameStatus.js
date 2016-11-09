@@ -82,3 +82,5 @@ class GameStatus{
     }
 
 }
+
+export default GameStatus;
