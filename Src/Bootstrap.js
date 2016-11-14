@@ -9,6 +9,7 @@ var Bootstrap = ((global)=>{
 
     var checkCorrectGameParam = (configProps)=>{
 
+
         //mapowanie wpasciwosci obiektu config na nazw klas obiektow w DOM
         var _expectedClassNameMapToConfig = new Map([
 
@@ -18,6 +19,9 @@ var Bootstrap = ((global)=>{
             ['startButtonDOMHandle', 'startButton']
 
         ]);
+
+
+        configProps = configProps || {};
 
         //check containerId
         if(typeof configProps.containerId == 'string' && configProps.containerId.trim().length > 0){
@@ -43,12 +47,12 @@ var Bootstrap = ((global)=>{
 
 
         //check surfaceWidth
-        if(!configProps.surfaceWidth || configProps.surfaceWidth < 200){
+        if(!configProps.surfaceWidth || configProps.surfaceWidth < 200 || typeof configProps.surfaceWidth != 'number'){
             return [false];
         }
 
         //all correct
-        return [true, Object.assign(configProps, DOMAccessHandle)];
+        return [true, Object.assign({}, configProps, DOMAccessHandle)];
 
     };
 
@@ -97,7 +101,6 @@ var Bootstrap = ((global)=>{
                            createGameStatusBoard().
                            createGameBoardMesh().
                            setBlockMovingEvents();
-
 
     };
 
@@ -154,6 +157,7 @@ var Bootstrap = ((global)=>{
 
         setParams : function(prop = {}){
 
+
            var [areConfigPropsCorrectVal, gamePropVal] = checkCorrectGameParam(prop);
 
            this.setAreConfigPropsCorrect(areConfigPropsCorrectVal);
@@ -165,22 +169,32 @@ var Bootstrap = ((global)=>{
         //wywolanie moze nastapic pozniej niz zdarzenie LOAD !!! nie można polegać na seterze GameEventListener
         setEventsListener : function(props = {}){
 
-            setEventsListenerTriggerFlag = true;
-
-            try {
-
-                importModule([props.eventEmitter, props.eventObserver]).then((importedModules)=> {
-
-                    this.setGameEventListener( tryRegisterObserverInEventEmitter(importedModules, props.actionsName) );
-
-                });
-
-            }
-            catch(e){
-
+            var errorMessage = ()=>{
                 console.info('EventsListener are not set');
                 setEventsListenerTriggerFlag = false;
-            }
+            };
+
+
+            return new Promise((resolve)=>{
+
+                    setEventsListenerTriggerFlag = true;
+
+                    try {
+                            importModule([props.eventEmitter, props.eventObserver]).then((importedModules)=> {
+
+                                this.setGameEventListener( tryRegisterObserverInEventEmitter(importedModules, props.actionsName) );
+                                resolve();
+
+                            }).catch((e)=>{
+                                errorMessage();
+                            });
+
+                    }
+                    catch(e){
+                        errorMessage();
+                    }
+
+            });
 
         },
 
@@ -198,14 +212,15 @@ var Bootstrap = ((global)=>{
                 }
 
 
+
             //wait for register observers
             setTimeout(()=>{
 
                 var gameEventListener = this.getGameEventListener();
 
-                startUpGame(gameProp, gameEventListener);
+                    startUpGame(gameProp, gameEventListener);
 
-                gameEventListener.notifyObservers(`Tetris_${gameProp.containerId}_ReadyToStart`);
+                    gameEventListener.notifyObservers(`Tetris_${gameProp.containerId}_ReadyToStart`);
 
             }, 50);
 

@@ -12,14 +12,7 @@ class Controller{
         var gameStep = config.surfaceWidth/20;
 
         this.gameIdString = `Tetris_${config.containerId}`;
-
-
-        console.log(config.containerId);
-
-
-
-
-
+        
         this.eventListener = eventListener ;
         this.nextTetrino = null;
 

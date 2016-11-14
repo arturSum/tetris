@@ -1,5 +1,5 @@
 // Karma configuration
-// Generated on Sat Nov 05 2016 13:35:20 GMT+0100 (Środkowoeuropejski czas stand.)
+// Generated on Fri Nov 11 2016 19:43:12 GMT+0100 (Środkowoeuropejski czas stand.)
 
 module.exports = function(config) {
   config.set({
@@ -10,14 +10,17 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine', 'steal-npm'],
 
 
     // list of files / patterns to load in the browser
-    files: [
-      'Src/**/*.js',
-      'Test/**/*.spec.js'
-    ],
+    steal:{
+      files:['Src/**/*.js'],
+      testFiles:['Test/**/*spec.js']
+    },
+
+
+
 
 
     // list of files to exclude
@@ -34,7 +37,7 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ['mocha'],
 
 
     // web server port
@@ -51,7 +54,7 @@ module.exports = function(config) {
 
 
     // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: true,
+    autoWatch: false,
 
 
     // start these browsers
