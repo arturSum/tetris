@@ -4,6 +4,12 @@
 module.exports = function(config) {
   config.set({
 
+    //wazne bez tego focus w karmie musi byc podczas wykonywania testow na przegladarce bo inaczek wariuje i wyzuca blednie testy
+    client: {
+      useIframe: false
+    },
+
+
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
 
@@ -16,7 +22,8 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     steal:{
       files:['Src/**/*.js'],
-      testFiles:['Test/**/*spec.js']
+      testFiles:['Test/Controller.spec.js']
+      //testFiles:['Test/**/*spec.js']
     },
 
 

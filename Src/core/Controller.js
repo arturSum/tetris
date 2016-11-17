@@ -7,7 +7,7 @@ import TetrinoFactory from './TetrinoFactory';
 class Controller{
 
 
-    constructor(config, eventListener = null){
+    constructor(config, eventListener = {notifyObservers:()=>{}}){
 
         var gameStep = config.surfaceWidth/20;
 
@@ -30,12 +30,14 @@ class Controller{
 
         //########### parametry opcjonalne #############
 
-        var {dropInterval = 100, tetrinoSpeedRising = 50, changingTetrinoSpeedInterval = 10} = config;
+        var {dropInterval = 1000, tetrinoSpeedRising = 50, changingGameSpeedTetrinoCounter = 10} = config;
+
+        this.defaultDropIntervalSettings  = dropInterval;
 
         this.dropInterval = dropInterval; //ms
         this.tetrinoSpeedRising = tetrinoSpeedRising;
         //co ile klockow nalezy zwiekszyc predkosc
-        this.changingTetrinoSpeedInterval = changingTetrinoSpeedInterval;
+        this.changingGameSpeedTetrinoCounter = changingGameSpeedTetrinoCounter;   //zmienic ta nazwie bo nie wiadomo do konca o co chodzi
 
         //#############################################################
 
@@ -82,7 +84,7 @@ class Controller{
         this.runAnimation = false;
         this.rafId = null;
         this.elapsedTime = 0;
-        this.dropInterval = 1000;
+        this.dropInterval = this.defaultDropIntervalSettings;
         this.elapsedTetrinoCounter = 0;
 
     }
@@ -155,7 +157,7 @@ class Controller{
 
     checkTetrinoSpeed(){
 
-        if(this.elapsedTetrinoCounter == this.changingTetrinoSpeedInterval){
+        if(this.elapsedTetrinoCounter == this.changingGameSpeedTetrinoCounter){
 
             if(this.dropInterval <= 50){
                 return;
@@ -188,17 +190,17 @@ class Controller{
 
         setTimeout(()=>{
 
-        this.gameStatus.clearNextTetrinoSurface();
-        this.gameBoard.clearMesh();
-        this.gameBoard.clearSurface();
+            this.gameStatus.clearNextTetrinoSurface();
+            this.gameBoard.clearMesh();
+            this.gameBoard.clearSurface();
 
-        this.gameStatus.updateScoreNode();
-        this.gameStatus.setStartButtonDisabledStatus(false);
+            this.gameStatus.updateScoreNode();
+            this.gameStatus.setStartButtonDisabledStatus(false);
 
-        this.gameBoard.showGameOverInfo(['GAME OVER', `Your score: ${this.score}`]);
-        this.eventListener.notifyObservers(`${this.gameIdString}_End`);
+            this.gameBoard.showGameOverInfo(['GAME OVER', `Your score: ${this.score}`]);
+            this.eventListener.notifyObservers(`${this.gameIdString}_End`);
 
-    }, 50);
+        }, 50);
 
     }
 
@@ -224,7 +226,7 @@ class Controller{
 
         this.rafId = requestAnimationFrame(()=>{
                 this.updateData(time);
-    });
+        });
 
     }
 

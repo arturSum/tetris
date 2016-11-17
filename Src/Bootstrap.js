@@ -51,6 +51,13 @@ var Bootstrap = ((global)=>{
             return [false];
         }
 
+
+
+        //DODAC SPRAWDZANIE PARAMETROW OPCJNALNYCH ....
+
+
+
+
         //all correct
         return [true, Object.assign({}, configProps, DOMAccessHandle)];
 

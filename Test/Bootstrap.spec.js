@@ -4,7 +4,7 @@ import {Controller} from 'Src/core/Controller'
 
 "use strict";
 
-describe('Bootstrap', ()=>{
+xdescribe('Bootstrap', ()=>{
 
     var game = null;
     var getGameHtmStructure = (gameId)=>{
