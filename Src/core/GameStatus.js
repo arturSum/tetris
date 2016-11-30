@@ -3,8 +3,6 @@ class GameStatus{
 
     constructor(config){
 
-        this.canvas = config.nextShapeCanvasDOMHandle;
-
         this.gameStep = config.gameStep;
         this.ctx = config.nextShapeCanvasDOMHandle.getContext('2d');
 
@@ -16,7 +14,12 @@ class GameStatus{
 
         this.ctx.fillStyle = 'white';
 
+    }
 
+    drawNextTetrino(nextShape){
+
+        this.clearNextTetrinoSurface();
+        this.drawBlock(nextShape);
     }
 
     createNextTetrinoSurface(){
@@ -24,11 +27,6 @@ class GameStatus{
         this.ctx.fillStyle = 'white';
         this.ctx.fillRect(0, 0, this.nextTetrinoSurfaceWidth, this.nextTetrinoSurfaceHeight);
     }
-
-    setStartButtonDisabledStatus(value){
-        this.startButtonNode.disabled = value;
-    }
-
     updateScoreNode(scoreQnt = ''){
 
         if(this.gameScoreNode){
@@ -37,10 +35,15 @@ class GameStatus{
 
     }
 
-    clearNextTetrinoSurface(){
-       this.createNextTetrinoSurface();
-    }
 
+
+    clearNextTetrinoSurface(){
+        this.createNextTetrinoSurface();
+    }
+    setStartButtonDisabledStatus(value = false){
+
+        this.startButtonNode.disabled = value;
+    }
 
     drawBlock(shape){
 
@@ -48,11 +51,11 @@ class GameStatus{
             posY = 0,
             positionCompensation = 0;
 
-        var offsetX = Math.floor(  ((this.nextTetrinoSurfaceWidth/2) - (shape.length/2) ) / this.gameStep  );
+        var offsetX = Math.floor( ((this.nextTetrinoSurfaceWidth/2) - (shape.length/2)) / this.gameStep );
 
         //kompensacja polozenia dla kwadratu (zeby wychodzil rowno na css)
         if(shape.length == 2){
-            positionCompensation = 10;
+            positionCompensation = Math.floor(this.gameStep/2);    //10;
 
         }
 
@@ -74,13 +77,7 @@ class GameStatus{
         });
 
     }
-
-    drawNextTetrino(nextShape){
-
-        this.clearNextTetrinoSurface();
-        this.drawBlock(nextShape);
-    }
-
 }
+
 
 export default GameStatus;

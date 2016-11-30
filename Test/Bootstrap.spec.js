@@ -2,9 +2,8 @@ import {Bootstrap} from 'Src/Bootstrap'
 import {gameObserver} from 'Src/GameObserver'
 import {Controller} from 'Src/core/Controller'
 
-"use strict";
 
-xdescribe('Bootstrap', ()=>{
+describe('Bootstrap', ()=>{
 
     var game = null;
     var getGameHtmStructure = (gameId)=>{
@@ -45,12 +44,18 @@ xdescribe('Bootstrap', ()=>{
 
     };
 
-    document.body.insertAdjacentHTML( 'afterbegin', getGameHtmStructure('gameBox'));
-
     beforeEach(()=>{
+
+        document.body.insertAdjacentHTML( 'afterbegin', getGameHtmStructure('gameBox'));
         game = new Bootstrap();
     });
 
+    afterEach(()=>{
+
+        document.body.innrHTML = '';
+        game = null;
+
+    });
 
     describe('SetParams', ()=>{
 
@@ -406,8 +411,6 @@ xdescribe('Bootstrap', ()=>{
 
 
     });
-
-
 
 
 });

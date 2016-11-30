@@ -9,6 +9,7 @@ class TetrinoFactory{
                 colorQnt = 7;
 
             for(var x=0; x<colorQnt; x++){
+
                 colors.push(`hsl( ${Math.floor(Math.random()*366)}, 100%, 50%  )`);
             }
 

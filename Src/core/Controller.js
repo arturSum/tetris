@@ -9,6 +9,7 @@ class Controller{
 
     constructor(config, eventListener = {notifyObservers:()=>{}}){
 
+        //dlugosc boku kloceka - wielkosc pixela
         var gameStep = config.surfaceWidth/20;
 
         this.gameIdString = `Tetris_${config.containerId}`;

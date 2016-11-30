@@ -65,7 +65,7 @@ class GameBoard{
 
     }
 
-    showGameOverInfo(textToShow){
+    showGameOverInfo(textToShow = ['GAME OVER', 'Your score: 0']){
 
         var fontSize = this.movingStep*2,
             offset = -fontSize;
@@ -89,7 +89,7 @@ class GameBoard{
 
     
     
-    changeXAxisBlockPosition(movingStep){
+    changeXAxisBlockPosition(movingStep = 1){
 
         this.tetrinoBlock.pos.x += movingStep;
 
@@ -97,27 +97,49 @@ class GameBoard{
             this.tetrinoBlock.pos.x -= movingStep;
 
         }
-        
+
     }
 
 
-    rotateBlock(direction){
+    rotateBlock(direction = 'right'){
 
-        var checkDirection = 1,
-            startXPos = this.tetrinoBlock.pos.x;
+        var startXPos = this.tetrinoBlock.pos.x,
+            offset = 1,
+            increaseOffsetCounter = 0;
 
+
+        direction = (direction == 'right' || direction == 'left')? direction : 'right';
         this.rotateBlockMesh(this.tetrinoBlock.shape, direction);
 
-        //sprawdzenie czy po rotaacji blok nie koliduje ze scianami i innymi klockami
-        //sprawdzamy kolizje z kazdej strony klocka na jego szerokosci
+        // sprawdzenie czy po rotaacji blok nie koliduje ze scianami i innymi klockami
+        // sprawdzamy kolizje z kazdej strony klocka na jego szerokosci raz z jednej raz z drugiej strony do mometu az kolizjo nie bedzie
         while(this.checkBlocksCollision(this.tetrinoBlock.shape, this.tetrinoBlock.pos)){
 
-            if(this.tetrinoBlock.pos.x-startXPos == 4){        //4 bo bedzie prawdzane maxymalnie 4 pixele z kazdej ze ston (4 to max szerokosc siatki klocka
-                this.tetrinoBlock.pos.x = startXPos;
-                checkDirection = -1;
+            this.tetrinoBlock.pos.x = startXPos;
+
+            this.tetrinoBlock.pos.x += offset;
+            increaseOffsetCounter++;
+
+            if(increaseOffsetCounter == 2){
+
+                offset--;
+                increaseOffsetCounter = 0;
+
             }
 
-            checkDirection == 1? this.tetrinoBlock.pos.x++ : this.tetrinoBlock.pos.x--;
+            offset = -offset;
+
+            //kolizja z dolna krawegdzia - nie mozna juz podnosic tylko trzeba anulowac zadanie obrotu!
+            if(offset>this.tetrinoBlock.shape.length){
+
+                this.rotateBlockMesh(this.tetrinoBlock.shape, direction == 'right'? 'left' : 'right');
+                this.tetrinoBlock.pos.x = startXPos;
+
+                return;
+
+            }
+
+
         }
 
 
@@ -125,7 +147,7 @@ class GameBoard{
 
 
 
-    rotateBlockMesh(shape, direction){
+    rotateBlockMesh(shape, direction = 'right'){
 
         var newShape = [];
         //[a, b] = [b, a]
@@ -232,7 +254,8 @@ class GameBoard{
         var row = null,
             wasRowCleared = false;
 
-        rowLoop : for(var y=this.boardMesh.length-1; y > 0; y--){
+
+        rowLoop : for(var y=this.boardMesh.length-1; y >= 0; y--){
 
                         for(var x=0; x < this.boardMesh[y].length; x++){
 
@@ -246,17 +269,12 @@ class GameBoard{
 
                         y++;
 
-                        this.controllerHandle.addScore();
                         wasRowCleared = true;
-
                     }
 
         return wasRowCleared;
-
     }
 
-
-    //COS TU NIE GRA Z KOLIZJA NA PRAWO I OBRACANIEM
 
     dropBlock(){
 
@@ -271,13 +289,13 @@ class GameBoard{
 
             this.mergeBlockWithBoardMesh(this.tetrinoBlock.shape, this.tetrinoBlock.pos);
 
-            this.resetBlockPosition();
 
             if(this.checkSurfaceLineFilling()){
+                this.controllerHandle.addScore();
                 this.controllerHandle.updateScoreInDOM();
             }
 
-
+            this.resetBlockPosition();
 
         }
 

@@ -6,9 +6,8 @@ import TetrinoFactory from 'Src/core/TetrinoFactory'
 import GameStatus from 'Src/core/GameStatus'
 import GameBoard from 'Src/core/GameBoard'
 
-"use strict";
 
-xdescribe('Controller Class', ()=>{
+describe('Controller Class', ()=>{
 
     var getGameHtmStructure = (gameId)=>{
 
@@ -47,7 +46,6 @@ xdescribe('Controller Class', ()=>{
                     </div>`;
 
     },
-        bootstrap = new Bootstrap(),
         gameProps = null,
         controller = null,
         eventListener = {notifyObservers : ()=>{}};
@@ -57,21 +55,26 @@ xdescribe('Controller Class', ()=>{
 
         document.body.insertAdjacentHTML( 'afterbegin', getGameHtmStructure('gameBox'));
 
-        bootstrap.setParams({
+        gameProps = {
+
             surfaceWidth : 400,
             containerId : 'gameBox',
-            changingGameSpeedTetrinoCounter : 2
-        });
 
-        gameProps = bootstrap.getGameProp();
+            mainBoardCanvasDOMHandle : document.querySelector('#gameBox .gameBoard'),
+            nextShapeCanvasDOMHandle : document.querySelector('#gameBox .nextShape'),
+            gameScoreDOMHandle : document.querySelector('#gameBox .score'),
+            startButtonDOMHandle : document.querySelector('#gameBox .startButton'),
+
+            changingGameSpeedTetrinoCounter : 2,
+            dropInterval : 1000,
+            tetrinoSpeedRising : 50
+        };
 
         controller = new Controller(gameProps, eventListener);
     });
 
     afterEach(()=>{
-
         document.body.innerHTML = '';
-        controller.gameOver();
     });
 
     describe('runGame', ()=>{
@@ -115,22 +118,97 @@ xdescribe('Controller Class', ()=>{
 
     describe('updateData', ()=>{
 
-        it('should move tetrino block down on certain interval[ms] (def:1000)', (done)=>{
-
-            var gameDefaultDropInterval = 1000;
+        beforeEach(()=>{
 
             spyOn(GameBoard.prototype, 'dropBlock');
+            spyOn(GameBoard.prototype, 'drawOnSurface');
 
-            controller.runGame();
+            window.requestAnimationFrame = (callback)=>{};
 
-            setTimeout(()=>{
+            jasmine.clock().install();
 
-                expect(GameBoard.prototype.dropBlock).toHaveBeenCalledTimes(2);
-                done();
+            controller.runAnimation = true;
+        });
 
-            }, (gameDefaultDropInterval*2) +100);
+        afterEach(()=>{
+            jasmine.clock().uninstall();
+        });
+
+
+        it('should move tetrino block down on certain interval[ms] (def:1000)', ()=>{
+
+            jasmine.clock().mockDate();
+
+            var lastTime = (new Date()).getTime();
+
+            //first run
+            controller.updateData(lastTime);
+            lastTime = (new Date()).getTime();
+
+            //rAF fake loop
+            setInterval(()=>{
+
+                controller.updateData(lastTime);
+                lastTime = (new Date()).getTime();
+
+            }, 1000);
+
+
+            jasmine.clock().tick(100);
+            expect(GameBoard.prototype.dropBlock).toHaveBeenCalledTimes(0);
+
+            jasmine.clock().tick(400);
+            expect(GameBoard.prototype.dropBlock).toHaveBeenCalledTimes(0);
+
+            jasmine.clock().tick(500);
+            expect(GameBoard.prototype.dropBlock).toHaveBeenCalledTimes(1);
+
+            jasmine.clock().tick(500);
+            expect(GameBoard.prototype.dropBlock).toHaveBeenCalledTimes(1);
+
+            jasmine.clock().tick(500);
+            expect(GameBoard.prototype.dropBlock).toHaveBeenCalledTimes(2);
+
+            jasmine.clock().tick(1000);
+            expect(GameBoard.prototype.dropBlock).toHaveBeenCalledTimes(3);
 
         });
+
+
+        it('should draw shape on surface on every frame', ()=>{
+
+            jasmine.clock().mockDate();
+
+            var lastTime = (new Date()).getTime();
+
+            //first run
+            controller.updateData(lastTime);
+            lastTime = (new Date()).getTime();
+
+            //rAF fake loop
+            setInterval(()=>{
+
+                controller.updateData(lastTime);
+                lastTime = (new Date()).getTime();
+
+            }, 17);
+
+
+
+            jasmine.clock().tick(10);
+            expect(GameBoard.prototype.drawOnSurface).toHaveBeenCalledTimes(1);
+
+            jasmine.clock().tick(17);
+            expect(GameBoard.prototype.drawOnSurface).toHaveBeenCalledTimes(2);
+
+            jasmine.clock().tick(3*17);
+            expect(GameBoard.prototype.drawOnSurface).toHaveBeenCalledTimes(2+3);
+
+            jasmine.clock().tick(10*17);
+            expect(GameBoard.prototype.drawOnSurface).toHaveBeenCalledTimes(5+10);
+
+        });
+
 
     });
 
@@ -138,22 +216,23 @@ xdescribe('Controller Class', ()=>{
 
         it('animation loop should be cancel', (done)=>{
 
-            var gameDefaultDropInterval = 1000;
+            spyOn(GameBoard.prototype, 'drawOnSurface');
 
-            spyOn(GameBoard.prototype, 'dropBlock');
+            controller.runAnimation = true;
 
-            controller.runGame();
+            controller.gameOver();
 
             setTimeout(()=>{
-                controller.gameOver();
-            }, gameDefaultDropInterval + 100);
 
-            //czekamy 2 razy dluzej zeby sprawdzic czy sie dalej wykonuje petla
-            setTimeout(()=>{
-                expect(GameBoard.prototype.dropBlock).toHaveBeenCalledTimes(1);
+                expect(controller.runAnimation).toBeFalsy();
                 done();
-            }, (gameDefaultDropInterval*2) + 100);
 
+            }, 100);
+
+
+            controller.updateData((new Date()).getTime());
+
+            expect(GameBoard.prototype.drawOnSurface).not.toHaveBeenCalled();
 
         });
 
