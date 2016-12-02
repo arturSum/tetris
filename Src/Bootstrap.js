@@ -2,15 +2,10 @@ import {Controller} from './core/Controller'
 
 
 var Bootstrap = ((global)=>{
-    
-
-    //#####################################
 
 
     var checkCorrectGameParam = (configProps)=>{
 
-
-        //mapowanie wpasciwosci obiektu config na nazw klas obiektow w DOM
         var _expectedClassNameMapToConfig = new Map([
 
             ['mainBoardCanvasDOMHandle', 'gameBoard'],
@@ -20,10 +15,8 @@ var Bootstrap = ((global)=>{
 
         ]);
 
-
         configProps = configProps || {};
 
-        //check containerId
         if(typeof configProps.containerId == 'string' && configProps.containerId.trim().length > 0){
 
             var DOMAccessHandle = {},
@@ -45,22 +38,11 @@ var Bootstrap = ((global)=>{
             return [false];
         }
 
-
-        //check surfaceWidth
         if(!configProps.surfaceWidth || configProps.surfaceWidth < 200 || typeof configProps.surfaceWidth != 'number'){
             return [false];
         }
 
-
-
-        //DODAC SPRAWDZANIE PARAMETROW OPCJNALNYCH ....
-
-
-
-
-        //all correct
         return [true, Object.assign({}, configProps, DOMAccessHandle)];
-
     };
 
 
@@ -81,12 +63,10 @@ var Bootstrap = ((global)=>{
         EventEmitterModule = EventEmitterModule[Object.keys(EventEmitterModule)[0]];
         EventObserverModule = EventObserverModule[Object.keys(EventObserverModule)[0]];
 
-        //rejestracja nasluchujacego obiektu
         while(actionsNameQnt--){
             EventEmitterModule.subscribe(actionsName[actionsNameQnt], EventObserverModule);
         }
 
-        //przekazanie go na zewnatrz
         return EventEmitterModule;
     };
 
@@ -94,12 +74,10 @@ var Bootstrap = ((global)=>{
     var startUpGame = (...config)=>{
 
         var [gameProp, gameEventListener] = config;
-        
-        var controllerInstance = new Controller(gameProp, gameEventListener);
-        
-        //global.TET = controllerInstance;
 
-        //run game on click
+                var controllerInstance = new Controller(gameProp, gameEventListener);
+
+
         gameProp.startButtonDOMHandle.addEventListener('click', ()=>{
             controllerInstance.runGame();
         });
@@ -113,12 +91,10 @@ var Bootstrap = ((global)=>{
 
 
 
-    //##################################################
 
 
     function Bootstrap(){
 
-       //zmienne prywatne - po kazdym wywolaniu konstriktora tworzone sa nowe instancje
        var areConfigPropsCorrect = false,
            gameProp = null,
            gameEventListener = {
@@ -126,7 +102,6 @@ var Bootstrap = ((global)=>{
            };
 
 
-        //---------------------------------
 
         this.setGameProp = (val)=>{
             gameProp = val;
@@ -155,12 +130,11 @@ var Bootstrap = ((global)=>{
     }
 
 
-    //################## public API ####################
 
 
     var setEventsListenerTriggerFlag = false;
-    
-    Bootstrap.prototype = {
+
+        Bootstrap.prototype = {
 
         setParams : function(prop = {}){
 
@@ -173,7 +147,6 @@ var Bootstrap = ((global)=>{
 
         },
 
-        //wywolanie moze nastapic pozniej niz zdarzenie LOAD !!! nie można polegać na seterze GameEventListener
         setEventsListener : function(props = {}){
 
             var errorMessage = ()=>{
@@ -220,7 +193,6 @@ var Bootstrap = ((global)=>{
 
 
 
-            //wait for register observers
             setTimeout(()=>{
 
                 var gameEventListener = this.getGameEventListener();

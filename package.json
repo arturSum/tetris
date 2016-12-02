@@ -14,6 +14,10 @@
     "steal": "^0.16.43"
   },
   "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-plumber": "^1.1.0",
+    "gulp-strip-comments": "^2.4.3",
+    "gulp-uglify": "^2.0.0",
     "jasmine": "^2.5.2",
     "karma": "^1.3.0",
     "karma-chrome-launcher": "^2.0.0",

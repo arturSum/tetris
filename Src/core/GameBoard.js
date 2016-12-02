@@ -1,8 +1,8 @@
 
 class GameBoard{
 
-    
-    constructor(config, controllerHandle){
+
+        constructor(config, controllerHandle){
 
 
         this.boardNodeHandler = config.mainBoardCanvasDOMHandle;
@@ -15,13 +15,13 @@ class GameBoard{
 
 
         this.ctx = config.mainBoardCanvasDOMHandle.getContext('2d');
-        
-        this.boardMesh = [];
-        
-        
-        this.controllerHandle = controllerHandle;
-        
-        this.tetrinoBlock = this.controllerHandle.getNewTetrino();
+
+                this.boardMesh = [];
+
+
+                        this.controllerHandle = controllerHandle;
+
+                this.tetrinoBlock = this.controllerHandle.getNewTetrino();
         this.tetrinoColors = this.controllerHandle.getTetrinoAvailableColors();
 
         this.tetrinoBlock.pos.x = this.countStartingXPos();
@@ -35,13 +35,13 @@ class GameBoard{
 
         this.ctx.fillStyle = 'black';
         this.ctx.fillRect(0, 0, this.boardWidth, this.boardHeight);
-        
-    }
+
+            }
 
     createMesh(){
 
         var xMatrix = [],
-            stepsHeightQnt = (this.boardHeight/this.movingStep),            //bo element siatki 0,0 jest juz na powierzchni planszy a nie po za nią !!! element 0,0 to gorna i lewa krawedz
+            stepsHeightQnt = (this.boardHeight/this.movingStep),            
             stepWidthQnt = (this.boardWidth/this.movingStep);
 
         while(stepsHeightQnt--){
@@ -87,9 +87,9 @@ class GameBoard{
 
     }
 
-    
-    
-    changeXAxisBlockPosition(movingStep = 1){
+
+
+            changeXAxisBlockPosition(movingStep = 1){
 
         this.tetrinoBlock.pos.x += movingStep;
 
@@ -111,8 +111,6 @@ class GameBoard{
         direction = (direction == 'right' || direction == 'left')? direction : 'right';
         this.rotateBlockMesh(this.tetrinoBlock.shape, direction);
 
-        // sprawdzenie czy po rotaacji blok nie koliduje ze scianami i innymi klockami
-        // sprawdzamy kolizje z kazdej strony klocka na jego szerokosci raz z jednej raz z drugiej strony do mometu az kolizjo nie bedzie
         while(this.checkBlocksCollision(this.tetrinoBlock.shape, this.tetrinoBlock.pos)){
 
             this.tetrinoBlock.pos.x = startXPos;
@@ -129,7 +127,6 @@ class GameBoard{
 
             offset = -offset;
 
-            //kolizja z dolna krawegdzia - nie mozna juz podnosic tylko trzeba anulowac zadanie obrotu!
             if(offset>this.tetrinoBlock.shape.length){
 
                 this.rotateBlockMesh(this.tetrinoBlock.shape, direction == 'right'? 'left' : 'right');
@@ -150,7 +147,6 @@ class GameBoard{
     rotateBlockMesh(shape, direction = 'right'){
 
         var newShape = [];
-        //[a, b] = [b, a]
 
         for(var y=0; y<shape.length; y++){
 
@@ -198,10 +194,8 @@ class GameBoard{
 
                 if(shape[y][x] !== 0){
 
-                    // kolizja z krawedziom dolna plansza  - this.gameBoardShape[y + pos.y]
                     if(typeof this.boardMesh[y + pos.y] == 'undefined' || this.boardMesh[y + pos.y][x + pos.x] !== 0){
 
-                        //throw 'Kolizja';
                         return true;
                     }
 
@@ -233,7 +227,6 @@ class GameBoard{
 
     resetBlockPosition(){
 
-        //zadanie sprawdzenia czy nalezy skrocic czas pomiedzy kolenymi spadkami klocka
         this.controllerHandle.checkTetrinoSpeed();
 
         this.tetrinoBlock = this.controllerHandle.getNextTetrino();
@@ -241,7 +234,6 @@ class GameBoard{
         this.tetrinoBlock.pos.x = this.countStartingXPos();
         this.tetrinoBlock.pos.y = 0;
 
-        //jezeli kolizja juz wystepuje przy poczatkowych ustawieniach tetrino tzn. gdy jest w pozycji y=0
         if(this.checkBlocksCollision(this.tetrinoBlock.shape, this.tetrinoBlock.pos)){
             this.controllerHandle.gameOver();
         }
@@ -281,10 +273,8 @@ class GameBoard{
         this.tetrinoBlock.pos.y++;
 
 
-        //kolizka jest w tedy gdy dwa pixele (kwadraty) na siebie nachodza
         if(this.checkBlocksCollision(this.tetrinoBlock.shape, this.tetrinoBlock.pos)){
 
-            //podnosimy do gory o jeden pixel zeby kolizji nie bylo
             this.tetrinoBlock.pos.y--;
 
             this.mergeBlockWithBoardMesh(this.tetrinoBlock.shape, this.tetrinoBlock.pos);

@@ -9,12 +9,11 @@ class Controller{
 
     constructor(config, eventListener = {notifyObservers:()=>{}}){
 
-        //dlugosc boku kloceka - wielkosc pixela
         var gameStep = config.surfaceWidth/20;
 
         this.gameIdString = `Tetris_${config.containerId}`;
-        
-        this.eventListener = eventListener ;
+
+                this.eventListener = eventListener ;
         this.nextTetrino = null;
 
         this.score = 0;
@@ -25,22 +24,18 @@ class Controller{
         this.rafId = null;
         this.elapsedTime = 0;
 
-        //co 5 klockow przyspieszenie o 50ms
         this.elapsedTetrinoCounter = 0;
 
 
-        //########### parametry opcjonalne #############
 
         var {dropInterval = 1000, tetrinoSpeedRising = 50, changingGameSpeedTetrinoCounter = 10} = config;
 
         this.defaultDropIntervalSettings  = dropInterval;
 
-        this.dropInterval = dropInterval; //ms
+        this.dropInterval = dropInterval; 
         this.tetrinoSpeedRising = tetrinoSpeedRising;
-        //co ile klockow nalezy zwiekszyc predkosc
-        this.changingGameSpeedTetrinoCounter = changingGameSpeedTetrinoCounter;   //zmienic ta nazwie bo nie wiadomo do konca o co chodzi
+        this.changingGameSpeedTetrinoCounter = changingGameSpeedTetrinoCounter;   
 
-        //#############################################################
 
         this.tetrinoFactory = new TetrinoFactory();
 
@@ -101,19 +96,19 @@ class Controller{
 
         switch(event.keyCode){
 
-            case 37: //left
+            case 37: 
                 this.moveBlockOnXAxis(-1);
                 break;
 
-            case 39: //right
+            case 39: 
                 this.moveBlockOnXAxis(1);
                 break;
 
-            case 40: //down
+            case 40: 
                 this.moveBlockOnYAxis();
                 break;
 
-            case 32: //space
+            case 32: 
                 this.rotateBlockWithCertainDirection('right');
                 break;
 

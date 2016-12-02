@@ -4,10 +4,10 @@ const GameObserver = (()=>{
 
 
     return{
-        
-        eventExecute : (eventId, additionalParam = [])=>{
-            
-            var gameId = eventId.split('_');
+
+                eventExecute : (eventId, additionalParam = [])=>{
+
+                        var gameId = eventId.split('_');
 
             var gameContainer = document.getElementById(gameId[1]);
 
@@ -33,7 +33,6 @@ const GameObserver = (()=>{
 
                 case 'Start' :
 
-                    //add transition to class
                     nextShapeCanvasDOMHandle.parentNode.className = `${nextShapeCanvasDOMHandle.parentNode.className.trim()} start`;
                     gameScoreDOMHandle.parentNode.className = `${gameScoreDOMHandle.parentNode.className.trim()} start`;
 
@@ -54,11 +53,11 @@ const GameObserver = (()=>{
             }
 
         }
-        
 
-    }
-    
-    
-})();
+
+            }
+
+
+        })();
 
 export {GameObserver};

@@ -77,7 +77,6 @@ describe('GameStatus', ()=>{
 
 			expect(surfaceData.indexOf(0)).toBe(-1);
 
-			//white surface
 			expect([
 				surfaceData[0],
 				surfaceData[1],
@@ -181,7 +180,6 @@ describe('GameStatus', ()=>{
 
 		it('should draw tetrino block on next tetrion surface', ()=>{
 
-			//red
 			var expectedColor = [255, 0, 0, 255],
 				areExpectedColorFound = false;
 
@@ -214,9 +212,7 @@ describe('GameStatus', ()=>{
 			gameStatus.createNextTetrinoSurface();
 
 
-			//------------ when game start ----------------------
 
-			//check red
 			areExpectedColorFound = checkExistingPixelInImageData(
 				ctx.getImageData(0, 0, gameStatus.nextTetrinoSurfaceWidth, gameStatus.nextTetrinoSurfaceHeight).data,
 				expectedColor
@@ -224,10 +220,8 @@ describe('GameStatus', ()=>{
 			expect(areExpectedColorFound).toBeFalsy();
 
 
-			//---------------------------------
 
 
-			//check white
 			expectedColor = [255, 255, 255, 255];
 
 			areExpectedColorFound = checkExistingPixelInImageData(
@@ -237,10 +231,8 @@ describe('GameStatus', ()=>{
 			expect(areExpectedColorFound).toBeTruthy();
 
 
-			//------------- when draw block -------------------------
 
 
-			//check red
 			gameStatus.drawBlock(tetrinoShape);
 
 			expectedColor = [255, 0, 0, 255];
@@ -256,7 +248,6 @@ describe('GameStatus', ()=>{
 
 		it('should set next tetrino block on correct position in surface', ()=>{
 
-			//in pixel
 			var expectedPosX = Math.floor( ((gameStatus.nextTetrinoSurfaceWidth/2) - (tetrinoShape.length/2)) / gameStatus.gameStep ),
 				expectedPosY = 0,
 				expectedColor = [255, 0, 0, 255];
@@ -267,7 +258,6 @@ describe('GameStatus', ()=>{
 			var ctxData = ctx.getImageData(0, 0, gameStatus.nextTetrinoSurfaceWidth, gameStatus.nextTetrinoSurfaceHeight).data;
 
 
-			//match: expect red pixel*gameStep(przesuniecie)
 			expect(
 				[
 					ctxData[((expectedPosY*gameStatus.nextTetrinoSurfaceWidth) + expectedPosX)*gameStatus.gameStep*4],
@@ -279,7 +269,6 @@ describe('GameStatus', ()=>{
 			).toEqual(expectedColor);
 
 
-			//not mach: expect white / XPos-1;
 			expect(
 				[
 					ctxData[((expectedPosY*gameStatus.nextTetrinoSurfaceWidth) + expectedPosX-1)*gameStatus.gameStep*4],
@@ -292,7 +281,6 @@ describe('GameStatus', ()=>{
 
 
 
-			//not mach: expect white / XPos+1;
 			expect(
 				[
 					ctxData[((expectedPosY*gameStatus.nextTetrinoSurfaceWidth) + expectedPosX+1)*gameStatus.gameStep*4],

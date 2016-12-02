@@ -2,20 +2,16 @@
     margin: 0;
     padding: 0;
 }
-
-
-
-/* Centrowanie w pionie flexbox */
 .vertical-center {
     min-height: 100%;
     min-height: 100vh;
-
     display: flex;
     align-items: center;
 }
 
 
-/* ******************************** */
+
+/* ********** game container animation **************** */
 
 
 
@@ -23,100 +19,64 @@
     from {opacity: 0;}
     to {opacity: 1;}
 }
-
-#gameBox.no-ready{
-    display: none;
-    opacity: 0;
-}
-#gameBox.ready{
-    display: block;
-    animation: gameFade_out 0.5s;
-    opacity: 1;
-}
-
+    #gameBox.no-ready{
+        display: none;
+        opacity: 0;
+    }
+    #gameBox.ready{
+        display: block;
+        animation: gameFade_out 0.5s;
+        opacity: 1;
+    }
 
 
-/* *********************** */
+
+/* ********* game loader container animation *************** */
 
 
 .gameBox_loader{
     width: 650px;
     height: 100%;
 }
-
-.gameBox_loader .core{
-
-    height:90px;
-    width:650px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-
+    .gameBox_loader .core{
+        height:90px;
+        width:650px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
 @keyframes hide_loader{
     from {opacity: 1;}
     to   {opacity: 0;}
 }
-
-.gameBox_loader.hiding_animation{
-    animation: hide_loader 0.5s;
-    opacity: 0;
-}
-
-.gameBox_loader.no-visible{
-    display: none;
-    opacity: 1;
-}
+    .gameBox_loader.hiding_animation{
+        animation: hide_loader 0.5s;
+        opacity: 0;
+    }
+    .gameBox_loader.no-visible{
+        display: none;
+        opacity: 1;
+    }
 
 
-
-
-
-
-
-
-/* *********************** */
-
-
-
+/* ********** loader letter animation**************** */
 
 
 @keyframes loaderAnimation{
-
     0% {transform: scale(1, 1);}
     50% {transform: scale(2, 2);}
     100% { transform: scale(1, 1);}
 }
-
-.gameBox_loader .core span.animate{
-    animation: loaderAnimation 0.4s;
-}
-
-.gameBox_loader .core span{
-    display: inline-block;
-}
+    .gameBox_loader .core span{
+        display: inline-block;
+    }
+    .gameBox_loader .core span.animate{
+        animation: loaderAnimation 0.4s;
+    }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/* ********************************* */
 
 
 
@@ -125,112 +85,73 @@
 }
 
 
-#gameBox .gameBoardContainer{
 
+#gameBox .gameBoardContainer{
     border : 3px solid blue;
     border-radius: 15px;
-
     padding: 10px 10px 8px 10px;
-
     width:428px;
 }
 
-#gameBox .gameStatusContainer{
 
-    margin-left: 20px;
 
-}
+/* ********************************* */
+
+
 
 #gameBox .nextShapeContainer{
-
     overflow: hidden;
-
     width: 140px;
     height: 0;
-
-    /* 140 */
-
     transition: height 0.3s;
-
 }
-
 #gameBox .nextShapeContainer.start{
-
     height : 140px;
-
 }
+    #gameBox .nextShapeContainer h3 span{
+        display: block;
+        width: inherit;
+    }
 
 
 
-
-#gameBox .nextShapeContainer h3 span{
-
-    display: block;
-    width: inherit;
-
-}
-
-
-
-
+/* **************************************** */
 
 
 
 #gameBox .scoreContainer{
-
     width: 140px;
     text-align: center;
-
-
-
     height: 0;
-
     transition: height 0.3s;
-
 }
-
-
-#gameBox .scoreContainer h3{
-    margin-top: 7px;
-}
-
-#gameBox .scoreContainer h1{
-    margin-top: 0px;
-}
-
-
-#gameBox .scoreContainer h3 span{
-    display: block;
-    width: inherit;
-}
-
-
-
 #gameBox .scoreContainer.start{
-
     width: 140px;
     text-align: center;
-
     height: 85px;
-
-
 }
+    #gameBox .scoreContainer h3{
+        margin-top: 7px;
+    }
+    #gameBox .scoreContainer h1{
+        margin-top: 0px;
+    }
+
+    #gameBox .scoreContainer .score{
+        display: block;
+        height: 45px;
+        text-align: center;
+        color: red;
+    }
+        #gameBox .scoreContainer h3 span{
+            display: block;
+            width: inherit;
+        }
 
 
 
 
 
-
-
-#gameBox .scoreContainer .score{
-
-    display: block;
-    height: 45px;
-    text-align: center;
-
-    color: red;
-
-}
 
 #gameBox .scoreContainer .no-start{
     display: none;
@@ -238,47 +159,30 @@
 
 
 
-/* ************************ */
 
 
+/* ******************************** */
 
-/* width fix */
+
 #gameBox .gameStatusContainer{
+    margin-left: 20px;
     width: 27%;
 }
-
-
-/* flex container for li */
-#gameBox .gameStatusContainer .buttonInfo{
-
-    margin: 20px 0 10px 0;
-    list-style-type: none;
-
-    max-width: 140px;
-
-    display: flex;
-    flex-wrap: wrap;
-
-}
-
-/* flex container for span / kbd */
-#gameBox .gameStatusContainer .buttonInfo li{
-
-    width: 140px;
-    margin-bottom: 2px;
-
-    display: flex;
-}
-
-#gameBox .gameStatusContainer .buttonInfo li span{
-    flex-grow: 1;
-}
-
-
-
-
-
-
-#gameBox .gameStatusContainer button{
-    width: 140px;
-}
+    #gameBox .gameStatusContainer button{
+        width: 140px;
+    }
+    #gameBox .gameStatusContainer .buttonInfo{
+        margin: 20px 0 10px 0;
+        list-style-type: none;
+        max-width: 140px;
+        display: flex;
+        flex-wrap: wrap;
+    }
+        #gameBox .gameStatusContainer .buttonInfo li{
+            width: 140px;
+            margin-bottom: 2px;
+            display: flex;
+        }
+            #gameBox .gameStatusContainer .buttonInfo li span{
+                flex-grow: 1;
+            }

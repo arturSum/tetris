@@ -8,8 +8,8 @@ class GameStatus{
 
         this.gameScoreNode = config.gameScoreDOMHandle;
         this.startButtonNode = config.startButtonDOMHandle;
-        
-        this.nextTetrinoSurfaceHeight = this.gameStep*6;
+
+                this.nextTetrinoSurfaceHeight = this.gameStep*6;
         this.nextTetrinoSurfaceWidth = this.gameStep*6;
 
         this.ctx.fillStyle = 'white';
@@ -52,9 +52,8 @@ class GameStatus{
 
         var offsetX = Math.floor( ((this.nextTetrinoSurfaceWidth/2) - (shape.length/2)) / this.gameStep );
 
-        //kompensacja polozenia dla kwadratu (zeby wychodzil rowno na css)
         if(shape.length == 2){
-            positionCompensation = Math.floor(this.gameStep/2);    //10;
+            positionCompensation = Math.floor(this.gameStep/2);    
 
         }
 

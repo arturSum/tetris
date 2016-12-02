@@ -13,7 +13,6 @@ class TetrinoFactory{
                 colors.push(`hsl( ${Math.floor(Math.random()*366)}, 100%, 50%  )`);
             }
 
-            //null bo numeracja w klockach zaczyna sie od 1
             colors.unshift(null);
 
             return colors;

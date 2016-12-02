@@ -102,7 +102,6 @@ describe('Bootstrap', ()=>{
 
         it('on incorrect config areConfigPropsCorrect should be false', ()=>{
 
-            //min width: 200
 
             game.setParams({
                 surfaceWidth : 10,
@@ -142,7 +141,6 @@ describe('Bootstrap', ()=>{
             expect(game.getAreConfigPropsCorrect()).toBe(false);
 
 
-            //-----------------------------
 
 
             game.setParams({
@@ -170,7 +168,6 @@ describe('Bootstrap', ()=>{
             expect(game.getAreConfigPropsCorrect()).toBe(false);
 
 
-            //------------------------------------
 
 
             game.setParams({});
@@ -181,8 +178,8 @@ describe('Bootstrap', ()=>{
 
             game.setParams('');
             expect(game.getAreConfigPropsCorrect()).toBe(false);
-            
-        });
+
+                    });
 
 
 
@@ -274,7 +271,6 @@ describe('Bootstrap', ()=>{
 
             });
 
-            //--------------------------------
 
             game.setEventsListener({
                 x : null
@@ -349,8 +345,8 @@ describe('Bootstrap', ()=>{
 
                 var correctActionName = 'Tetris_gameBox_ReadyToStart',
                     eventListener = game.getGameEventListener();
-                
-                spyOn(eventListener, 'notifyObservers');
+
+                                spyOn(eventListener, 'notifyObservers');
 
                 game.setParams({
                     surfaceWidth : 400,

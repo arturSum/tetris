@@ -1,7 +1,4 @@
 
-/*
- Emiter zdarzen
- */
 
 
 const EventEmitter = (() => {
@@ -9,7 +6,6 @@ const EventEmitter = (() => {
     var _eventsMap = new Map(),
         _observersList = new Set(),
 
-        //metoda pop dla obiektu Map (pobiera i usuwa ze wskazanego zbioru dany element)
         _popElement = (source, key) => {
 
             var deletedValue = source.get(key);

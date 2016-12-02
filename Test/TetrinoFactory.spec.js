@@ -83,7 +83,6 @@ describe('TetrinoFactory', ()=>{
             expect(availableTetrinoColor[0]).toBeNull();
 
 
-            //-----------------------------------
 
 
             availableTetrinoColor.shift();

@@ -112,9 +112,9 @@ describe('Controller Class', ()=>{
 
             expect(GameBoard.prototype.drawOnSurface).toHaveBeenCalled();
         });
-        
 
-    });
+
+            });
 
     describe('updateData', ()=>{
 
@@ -141,11 +141,9 @@ describe('Controller Class', ()=>{
 
             var lastTime = (new Date()).getTime();
 
-            //first run
             controller.updateData(lastTime);
             lastTime = (new Date()).getTime();
 
-            //rAF fake loop
             setInterval(()=>{
 
                 controller.updateData(lastTime);
@@ -181,11 +179,9 @@ describe('Controller Class', ()=>{
 
             var lastTime = (new Date()).getTime();
 
-            //first run
             controller.updateData(lastTime);
             lastTime = (new Date()).getTime();
 
-            //rAF fake loop
             setInterval(()=>{
 
                 controller.updateData(lastTime);
@@ -264,11 +260,11 @@ describe('Controller Class', ()=>{
                 done();
 
             }, 100);
-            
-        });
-        
-        
-        it('startupButton should be enabled', (done)=>{
+
+                    });
+
+
+                        it('startupButton should be enabled', (done)=>{
 
             spyOn(GameStatus.prototype, 'setStartButtonDisabledStatus');
 
@@ -326,9 +322,9 @@ describe('Controller Class', ()=>{
             }, 100);
 
         });
-        
 
-    });
+
+            });
 
     describe('checkTetrinoSpeed', ()=>{
 
