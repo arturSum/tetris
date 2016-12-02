@@ -1,5 +1,5 @@
 import {Bootstrap} from 'Src/Bootstrap'
-import {gameObserver} from 'Src/GameObserver'
+import {GameObserver} from 'Src/helpers/GameObserver'
 import {Controller} from 'Src/core/Controller'
 
 
@@ -194,22 +194,22 @@ describe('Bootstrap', ()=>{
 
             var config =  {
 
-                eventEmitter : 'Src/EventEmitter',
-                eventObserver : 'Src/GameObserver',
+                eventEmitter : 'Src/helpers/EventEmitter',
+                eventObserver : 'Src/helpers/GameObserver',
                 actionsName : ['Tetris_gameBox_Start', 'Tetris_gameBox_End', 'Tetris_gameBox_ReadyToStart']
             };
 
 
             it('should register eventObserver in eventEmitter', (done)=>{
 
+                spyOn(GameObserver, 'eventExecute');
+
                 game.setEventsListener(config).then(()=>{
 
                     var gameEventListener = game.getGameEventListener();
 
-                    spyOn(gameObserver, 'eventExecute');
-
                     gameEventListener.notifyObservers(config.actionsName[0]);
-                    expect(gameObserver.eventExecute).toHaveBeenCalled();
+                    expect(GameObserver.eventExecute).toHaveBeenCalled();
 
                     done();
 
@@ -305,7 +305,7 @@ describe('Bootstrap', ()=>{
             });
 
             game.setEventsListener({
-                eventEmitter : 'Src/EventEmitter',
+                eventEmitter : 'Src/helpers/EventEmitter',
                 eventObserver : 'fakeObserver',
                 z : ['fake']
             }).then(()=>{
@@ -359,7 +359,7 @@ describe('Bootstrap', ()=>{
                 game.run();
 
                 setTimeout(()=>{
-                    expect(eventListener.notifyObservers).toHaveBeenCalledWidth(correctActionName);
+                    expect(eventListener.notifyObservers).toHaveBeenCalledWith(correctActionName);
                 }, 100);
 
             });

@@ -6,13 +6,28 @@
 
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="main.css" />
+
+    <script type="text/javascript" src="LoadingLetterAnimation.js"></script>
+
 </head>
 <body>
 
+    <div class="container vertical-center gameBox_loader">
+       <div class="row">
+           <div class="col-md-12">
 
-    <div id="gameBox" class="spinner">
+               <h3 class="core">
+                   <span>L</span><span>o</span><span>a</span><span>d</span><span>i</span><span>n</span><span>g</span> ...
+               </h3>
 
-        <div class="container">
+           </div>
+       </div>
+    </div>
+
+
+    <div id="gameBox" class="no-ready">
+
+        <div class="container vertical-center">
 
             <div class="row">
 
@@ -20,16 +35,23 @@
                      <canvas class="gameBoard">You browser not support canvas element</canvas>
                 </div>
 
-                <div class="gameStatusContainer col-md-2">
+                <div class="gameStatusContainer col-md-3">
+
+                    <ul class="buttonInfo visible">
+                        <li><span>move left</span><kbd>left</kbd></li>
+                        <li><span>move right</span><kbd>right</kbd></li>
+                        <li><span>move down</span><kbd>down</kbd></li>
+                        <li><span>rotate</span><kbd>space</kbd></li>
+                    </ul>
 
                     <div class="nextShapeContainer">
                         <h3><span class="label label-success">Next</span></h3>
                         <canvas class="nextShape"></canvas>
                     </div>
 
-                    <div  class="scoreContainer">
+                    <div class="scoreContainer">
                         <h3><span class="label label-success">Score</span></h3>
-                        <h1 class="score"></h1>
+                        <h1 class="score no-start">0</h1>
                     </div>
 
                     <div class="btn-group btn-group-justified buttonContainer" role="group">
@@ -58,8 +80,8 @@
 
             var eventsListenerConfig =  {
 
-                eventEmitter : 'Src/EventEmitter',
-                eventObserver : 'Src/GameObserver',
+                eventEmitter : 'Src/helpers/EventEmitter',
+                eventObserver : 'Src/helpers/GameObserver',
                 actionsName : ['Tetris_gameBox_Start', 'Tetris_gameBox_End', 'Tetris_gameBox_ReadyToStart']
             };
 

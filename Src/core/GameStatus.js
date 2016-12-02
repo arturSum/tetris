@@ -24,10 +24,9 @@ class GameStatus{
 
     createNextTetrinoSurface(){
 
-        this.ctx.fillStyle = 'white';
         this.ctx.fillRect(0, 0, this.nextTetrinoSurfaceWidth, this.nextTetrinoSurfaceHeight);
     }
-    updateScoreNode(scoreQnt = ''){
+    updateScoreNode(scoreQnt = 0){
 
         if(this.gameScoreNode){
             this.gameScoreNode.innerHTML = scoreQnt;
