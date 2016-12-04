@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
             animationLetters[currentLetterAnimationFlag].className = 'animate';
             currentLetterAnimationFlag++;
 
-            //konieck danych wejsciowych - reset ustawien i start od poczatku
             if(currentLetterAnimationFlag > animationLetters.length-1){
                 currentLetterAnimationFlag = 0;
             }

@@ -74,7 +74,7 @@ describe('Controller Class', ()=>{
     });
 
     afterEach(()=>{
-        document.body.innerHTML = '';
+        document.body.removeChild(document.getElementById('gameBox'));
     });
 
     describe('runGame', ()=>{

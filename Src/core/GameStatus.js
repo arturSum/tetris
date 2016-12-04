@@ -9,10 +9,8 @@ class GameStatus{
         this.gameScoreNode = config.gameScoreDOMHandle;
         this.startButtonNode = config.startButtonDOMHandle;
 
-                this.nextTetrinoSurfaceHeight = this.gameStep*6;
+        this.nextTetrinoSurfaceHeight = this.gameStep*6;
         this.nextTetrinoSurfaceWidth = this.gameStep*6;
-
-        this.ctx.fillStyle = 'white';
 
     }
 
@@ -24,6 +22,7 @@ class GameStatus{
 
     createNextTetrinoSurface(){
 
+        this.ctx.fillStyle = 'white';
         this.ctx.fillRect(0, 0, this.nextTetrinoSurfaceWidth, this.nextTetrinoSurfaceHeight);
     }
     updateScoreNode(scoreQnt = 0){

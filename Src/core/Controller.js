@@ -13,7 +13,7 @@ class Controller{
 
         this.gameIdString = `Tetris_${config.containerId}`;
 
-                this.eventListener = eventListener ;
+        this.eventListener = eventListener ;
         this.nextTetrino = null;
 
         this.score = 0;

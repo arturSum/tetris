@@ -66,7 +66,6 @@
 
     </div>
 
-
     <script type="text/javascript" src="node_modules/steal/steal.js" data-main="@empty"></script>
 
     <script type="text/javascript">
@@ -78,10 +77,9 @@
                 containerId : 'gameBox'
             };
 
-            var eventsListenerConfig =  {
+            var observerConfig =  {
 
-                eventEmitter : 'Src/helpers/EventEmitter',
-                eventObserver : 'Src/helpers/GameObserver',
+                observer : 'Src/helpers/Observers/GameObserver',
                 actionsName : ['Tetris_gameBox_Start', 'Tetris_gameBox_End', 'Tetris_gameBox_ReadyToStart']
             };
 
@@ -91,7 +89,7 @@
                 var game = new module.Bootstrap();
 
                 game.setParams(config);
-                game.setEventsListener(eventsListenerConfig);
+                game.setObserver(observerConfig);
 
                 game.run();
 

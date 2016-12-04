@@ -1,13 +1,13 @@
+import AObserver from './AObserver'
 
 
-const GameObserver = (()=>{
+
+const GameObserver = function(){
 
 
-    return{
+        this.eventExecute = (eventId, additionalParam = [])=> {
 
-                eventExecute : (eventId, additionalParam = [])=>{
-
-                        var gameId = eventId.split('_');
+            var gameId = eventId.split('_');
 
             var gameContainer = document.getElementById(gameId[1]);
 
@@ -15,14 +15,14 @@ const GameObserver = (()=>{
                 gameScoreDOMHandle = document.querySelector(`#${gameId[1]} .score`),
                 loaderNode = document.querySelector(`.${gameId[1]}_loader`);
 
-            switch(gameId[2]){
+            switch (gameId[2]) {
 
                 case 'ReadyToStart' :
 
                     window[Symbol.for('gameBox_loader')] = 'cancel_loader';
                     loaderNode.className = `${loaderNode.className} hiding_animation`;
 
-                    setTimeout(()=>{
+                    setTimeout(() => {
 
                         loaderNode.className = loaderNode.className.replace('hiding_animation', 'no-visible');
                         gameContainer.className = gameContainer.className.replace('no-ready', 'ready');
@@ -54,10 +54,14 @@ const GameObserver = (()=>{
 
         }
 
+};
 
-            }
 
 
-        })();
+
+GameObserver.prototype = Object.create(AObserver.prototype);
+
 
 export {GameObserver};
+
+

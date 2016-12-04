@@ -1,95 +1,93 @@
 import {Controller} from './core/Controller'
+import EventEmitter from './helpers/EventEmitter'
+
+import AObserver from './helpers/Observers/AObserver'
 
 
-var Bootstrap = ((global)=>{
+var Bootstrap = (()=>{
 
 
-    var checkCorrectGameParam = (configProps)=>{
+        var checkCorrectGameParam = (configProps)=>{
 
-        var _expectedClassNameMapToConfig = new Map([
+                var _expectedClassNameMapToConfig = new Map([
 
-            ['mainBoardCanvasDOMHandle', 'gameBoard'],
-            ['nextShapeCanvasDOMHandle', 'nextShape'],
-            ['gameScoreDOMHandle', 'score'],
-            ['startButtonDOMHandle', 'startButton']
+                    ['mainBoardCanvasDOMHandle', 'gameBoard'],
+                    ['nextShapeCanvasDOMHandle', 'nextShape'],
+                    ['gameScoreDOMHandle', 'score'],
+                    ['startButtonDOMHandle', 'startButton']
 
-        ]);
+                ]);
 
-        configProps = configProps || {};
+                configProps = configProps || {};
 
-        if(typeof configProps.containerId == 'string' && configProps.containerId.trim().length > 0){
+                if(typeof configProps.containerId == 'string' && configProps.containerId.trim().length > 0){
 
-            var DOMAccessHandle = {},
-                singleDomNode = null;
+                    var DOMAccessHandle = {},
+                        singleDomNode = null;
 
-            for(let [key, value] of _expectedClassNameMapToConfig){
+                    for(let [key, value] of _expectedClassNameMapToConfig){
 
-                singleDomNode = document.querySelector(`#${configProps.containerId} .${value}`);
+                        singleDomNode = document.querySelector(`#${configProps.containerId} .${value}`);
 
-                if(singleDomNode){
-                    DOMAccessHandle[key] = singleDomNode;
+                        if(singleDomNode){
+                            DOMAccessHandle[key] = singleDomNode;
+                        }
+                        else{
+                            return [false];
+                        }
+                    }
                 }
                 else{
                     return [false];
                 }
-            }
-        }
-        else{
-            return [false];
-        }
 
-        if(!configProps.surfaceWidth || configProps.surfaceWidth < 200 || typeof configProps.surfaceWidth != 'number'){
-            return [false];
-        }
+                if(!configProps.surfaceWidth || configProps.surfaceWidth < 200 || typeof configProps.surfaceWidth != 'number'){
+                    return [false];
+                }
 
-        return [true, Object.assign({}, configProps, DOMAccessHandle)];
-    };
+                return [true, Object.assign({}, configProps, DOMAccessHandle)];
+        },
 
+        tryRegisterObserverInEventEmitter = (...data)=>{
 
-    var importModule = (moduleStorage)=>{
+                var [observerModule, actionsName, eventEmitter] = data,
+                    actionsNameQnt = actionsName.length,
+                    currentObserverClass,
+                    observerObj;
 
-        return Promise.all(moduleStorage.map((val)=>{
-            return System.import(val)
-        }))
-    };
+                for(var observerName in observerModule){
 
+                    currentObserverClass = observerModule[observerName];
 
-    var tryRegisterObserverInEventEmitter = (...data)=>{
+                    if(
+                        typeof currentObserverClass === 'function' &&
+                        (observerObj = new currentObserverClass()) instanceof AObserver
+                    ){
 
+                        while(actionsNameQnt--){
+                            eventEmitter.subscribe(actionsName[actionsNameQnt], observerObj);
+                        }
 
-        var [[EventEmitterModule, EventObserverModule],  actionsName] = data,
-             actionsNameQnt = actionsName.length;
+                        return observerObj;
+                    }
 
-        EventEmitterModule = EventEmitterModule[Object.keys(EventEmitterModule)[0]];
-        EventObserverModule = EventObserverModule[Object.keys(EventObserverModule)[0]];
+                }
+        },
 
-        while(actionsNameQnt--){
-            EventEmitterModule.subscribe(actionsName[actionsNameQnt], EventObserverModule);
-        }
+        startUpGame = (gameProp, eventEmitter)=>{
 
-        return EventEmitterModule;
-    };
+                var controllerInstance = new Controller(gameProp, eventEmitter);
 
+                gameProp.startButtonDOMHandle.addEventListener('click', ()=>{
+                    controllerInstance.runGame();
+                });
 
-    var startUpGame = (...config)=>{
+                controllerInstance.createGameBoard().
+                                   createGameStatusBoard().
+                                   createGameBoardMesh().
+                                   setBlockMovingEvents();
 
-        var [gameProp, gameEventListener] = config;
-
-                var controllerInstance = new Controller(gameProp, gameEventListener);
-
-
-        gameProp.startButtonDOMHandle.addEventListener('click', ()=>{
-            controllerInstance.runGame();
-        });
-
-        controllerInstance.createGameBoard().
-                           createGameStatusBoard().
-                           createGameBoardMesh().
-                           setBlockMovingEvents();
-
-    };
-
-
+        };
 
 
 
@@ -97,25 +95,27 @@ var Bootstrap = ((global)=>{
 
        var areConfigPropsCorrect = false,
            gameProp = null,
-           gameEventListener = {
-               notifyObservers : ()=>{}
-           };
-
+           eventEmitter = EventEmitter(),
+           gameObserver = null;
 
 
         this.setGameProp = (val)=>{
             gameProp = val;
         };
         this.getGameProp = ()=>{
-            return gameProp
+            return gameProp;
         };
 
-        this.setGameEventListener = (val)=>{
-            gameEventListener = val;
-
+        this.setGameObserver = (observer)=>{
+          gameObserver = observer;
         };
-        this.getGameEventListener = ()=>{
-            return gameEventListener;
+
+        this.getGameObserver = ()=>{
+            return gameObserver;
+        };
+
+        this.getEventEmitter = ()=>{
+            return eventEmitter;
         };
 
         this.setAreConfigPropsCorrect = (val)=>{
@@ -126,52 +126,45 @@ var Bootstrap = ((global)=>{
         };
 
 
-
     }
 
 
-
-
-    var setEventsListenerTriggerFlag = false;
-
-        Bootstrap.prototype = {
+    Bootstrap.prototype = {
 
         setParams : function(prop = {}){
-
 
            var [areConfigPropsCorrectVal, gamePropVal] = checkCorrectGameParam(prop);
 
            this.setAreConfigPropsCorrect(areConfigPropsCorrectVal);
            this.setGameProp(gamePropVal);
 
-
         },
 
-        setEventsListener : function(props = {}){
+        setObserver : function(props = {}){
 
-            var errorMessage = ()=>{
-                console.info('EventsListener are not set');
-                setEventsListenerTriggerFlag = false;
+            var errorMessage = (e)=>{
+                console.log(e);
+                console.info('Can not register observer in EventEmitter');
+
             };
-
 
             return new Promise((resolve)=>{
 
-                    setEventsListenerTriggerFlag = true;
-
                     try {
-                            importModule([props.eventEmitter, props.eventObserver]).then((importedModules)=> {
 
-                                this.setGameEventListener( tryRegisterObserverInEventEmitter(importedModules, props.actionsName) );
-                                resolve();
+                        System.import(props.observer).then((importedModules)=>{
 
-                            }).catch((e)=>{
-                                errorMessage();
-                            });
+                            this.setGameObserver( tryRegisterObserverInEventEmitter(importedModules, props.actionsName, this.getEventEmitter()) );
+                            resolve();
+
+                        })
+                        .catch((e)=>{
+                                errorMessage(e);
+                        });
 
                     }
                     catch(e){
-                        errorMessage();
+                        errorMessage(e);
                     }
 
             });
@@ -182,38 +175,30 @@ var Bootstrap = ((global)=>{
         run : function(){
 
              var gameProp = this.getGameProp(),
-                 areConfigPropsCorrect = this.getAreConfigPropsCorrect();
-
+                 areConfigPropsCorrect = this.getAreConfigPropsCorrect(),
+                 eventEmitter = this.getEventEmitter();
 
              if(!areConfigPropsCorrect){
 
                     document.body.innerHTML = '';
                     throw 'Tetris: Config props are incorrect';
-                }
-
-
+             }
 
             setTimeout(()=>{
 
-                var gameEventListener = this.getGameEventListener();
-
-                    startUpGame(gameProp, gameEventListener);
-
-                    gameEventListener.notifyObservers(`Tetris_${gameProp.containerId}_ReadyToStart`);
+                startUpGame(gameProp, eventEmitter);
+                eventEmitter.notifyObservers(`Tetris_${gameProp.containerId}_ReadyToStart`);
 
             }, 50);
 
-
         }
-
 
     };
 
 
-
     return Bootstrap;
 
-})(window);
+})();
 
 export {Bootstrap}
 

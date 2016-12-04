@@ -60,9 +60,7 @@ describe('GameStatus', ()=>{
 	});
 
 	afterEach(()=>{
-
-		document.body.innerHTML = '';
-		gameStatus = null;
+        document.body.removeChild(document.getElementById('gameBox'));
 	});
 
 	describe('createNextTetrinoSurface', ()=>{

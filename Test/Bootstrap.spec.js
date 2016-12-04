@@ -1,11 +1,13 @@
 import {Bootstrap} from 'Src/Bootstrap'
-import {GameObserver} from 'Src/helpers/GameObserver'
+import {GameObserver} from 'Src/helpers/Observers/GameObserver'
 import {Controller} from 'Src/core/Controller'
+
 
 
 describe('Bootstrap', ()=>{
 
-    var game = null;
+    var game = null,
+        EventEmitterObj = null;
     var getGameHtmStructure = (gameId)=>{
 
       return   `<div id="${gameId}" class="spinner">
@@ -48,13 +50,12 @@ describe('Bootstrap', ()=>{
 
         document.body.insertAdjacentHTML( 'afterbegin', getGameHtmStructure('gameBox'));
         game = new Bootstrap();
+
     });
 
     afterEach(()=>{
 
-        document.body.innrHTML = '';
-        game = null;
-
+        document.body.removeChild(document.getElementById('gameBox'));
     });
 
     describe('SetParams', ()=>{
@@ -72,10 +73,7 @@ describe('Bootstrap', ()=>{
 
             it('areConfigPropsCorrect should be true', ()=>{
 
-                var areConfigPropsCorrect = game.getAreConfigPropsCorrect();
-
-                expect(typeof areConfigPropsCorrect).toBe('boolean');
-                expect(areConfigPropsCorrect).toBe(true);
+                expect(game.getAreConfigPropsCorrect()).toBe(true);
             });
 
 
@@ -98,10 +96,7 @@ describe('Bootstrap', ()=>{
 
         });
 
-
-
         it('on incorrect config areConfigPropsCorrect should be false', ()=>{
-
 
             game.setParams({
                 surfaceWidth : 10,
@@ -179,50 +174,34 @@ describe('Bootstrap', ()=>{
             game.setParams('');
             expect(game.getAreConfigPropsCorrect()).toBe(false);
 
-                    });
-
-
+        });
 
     });
 
-    describe('setEventsListener', ()=>{
+    describe('setObserver', ()=>{
 
         describe('on correct config', ()=>{
 
             var config =  {
-
-                eventEmitter : 'Src/helpers/EventEmitter',
-                eventObserver : 'Src/helpers/GameObserver',
+                observer : 'Src/helpers/Observers/GameObserver',
                 actionsName : ['Tetris_gameBox_Start', 'Tetris_gameBox_End', 'Tetris_gameBox_ReadyToStart']
             };
 
 
-            it('should register eventObserver in eventEmitter', (done)=>{
+            it('should register observer in EventEmitter', (done)=>{
 
-                spyOn(GameObserver, 'eventExecute');
+                var eventEmitter = game.getEventEmitter(),
+                    gameObserver = null;
 
-                game.setEventsListener(config).then(()=>{
+                game.setObserver(config).then(()=>{
 
-                    var gameEventListener = game.getGameEventListener();
+                    gameObserver = game.getGameObserver();
 
-                    gameEventListener.notifyObservers(config.actionsName[0]);
-                    expect(GameObserver.eventExecute).toHaveBeenCalled();
+                    spyOn(gameObserver, 'eventExecute');
 
-                    done();
+                    eventEmitter.notifyObservers(config.actionsName[0]);
 
-                });
-
-            });
-
-
-            it('should set gameEventListener props', (done)=>{
-
-                game.setEventsListener(config).then(()=>{
-
-                    var gameEventListener = game.getGameEventListener();
-
-                    expect(typeof gameEventListener).toBe('object');
-                    expect(Object.keys(gameEventListener).sort()).toEqual(['subscribe', 'detach', 'notifyObservers'].sort());
+                    expect(gameObserver.eventExecute).toHaveBeenCalled();
 
                     done();
 
@@ -232,108 +211,6 @@ describe('Bootstrap', ()=>{
 
 
         });
-
-
-
-        it('on incorrect config should set gameEventListener on default ', ()=>{
-
-
-            game.setEventsListener('').then(()=>{
-
-                var gameEventListener = game.getGameEventListener();
-
-                expect(typeof gameEventListener).toBe('object');
-                expect(gameEventListener).toContain('notifyObservers');
-
-                done();
-
-            });
-
-            game.setEventsListener({}).then(()=>{
-
-                var gameEventListener = game.getGameEventListener();
-
-                expect(typeof gameEventListener).toBe('object');
-                expect(gameEventListener).toContain('notifyObservers');
-
-                done();
-
-            });
-
-            game.setEventsListener(null).then(()=>{
-
-                var gameEventListener = game.getGameEventListener();
-
-                expect(typeof gameEventListener).toBe('object');
-                expect(gameEventListener).toContain('notifyObservers');
-
-                done();
-
-            });
-
-
-            game.setEventsListener({
-                x : null
-            }).then(()=>{
-
-                var gameEventListener = game.getGameEventListener();
-
-                expect(typeof gameEventListener).toBe('object');
-                expect(gameEventListener).toContain('notifyObservers');
-
-                done();
-
-            });
-
-            game.setEventsListener({
-                x : null,
-                eventObserver : 'fakeObserver',
-                z : 'fake'
-            }).then(()=>{
-
-                var gameEventListener = game.getGameEventListener();
-
-                expect(typeof gameEventListener).toBe('object');
-                expect(gameEventListener).toContain('notifyObservers');
-
-                done();
-
-            });
-
-            game.setEventsListener({
-                eventEmitter : 'Src/helpers/EventEmitter',
-                eventObserver : 'fakeObserver',
-                z : ['fake']
-            }).then(()=>{
-
-                var gameEventListener = game.getGameEventListener();
-
-                expect(typeof gameEventListener).toBe('object');
-                expect(gameEventListener).toContain('notifyObservers');
-
-                done();
-
-            });
-
-            game.setEventsListener({
-                x : '',
-                y : [],
-                z : {}
-            }).then(()=>{
-
-                var gameEventListener = game.getGameEventListener();
-
-                expect(typeof gameEventListener).toBe('object');
-                expect(gameEventListener).toContain('notifyObservers');
-
-                done();
-
-            });
-
-
-        });
-
-
 
     });
 
@@ -341,12 +218,13 @@ describe('Bootstrap', ()=>{
 
         describe('on correct settings', ()=>{
 
-            it('should announce correct ReadyToStart action', ()=>{
+            it('should announce correct ReadyToStart action', (done)=>{
 
                 var correctActionName = 'Tetris_gameBox_ReadyToStart',
-                    eventListener = game.getGameEventListener();
+                    eventEmitter = game.getEventEmitter();
 
-                                spyOn(eventListener, 'notifyObservers');
+
+                spyOn(eventEmitter, 'notifyObservers');
 
                 game.setParams({
                     surfaceWidth : 400,
@@ -355,14 +233,17 @@ describe('Bootstrap', ()=>{
                 game.run();
 
                 setTimeout(()=>{
-                    expect(eventListener.notifyObservers).toHaveBeenCalledWith(correctActionName);
+
+                    expect(eventEmitter.notifyObservers).toHaveBeenCalledWith(correctActionName);
+                    done();
+
                 }, 100);
 
             });
 
-            it('Controller module should prepare to start game', ()=>{
+            it('Controller module should prepare to start game', (done)=>{
 
-                spyOn(Controller.prototype, 'createGameBoard');
+                spyOn(Controller.prototype, 'createGameBoard').and.callThrough();
 
                 game.setParams({
                     surfaceWidth : 400,
@@ -371,12 +252,15 @@ describe('Bootstrap', ()=>{
                 game.run();
 
                 setTimeout(()=>{
+
                     expect(Controller.prototype.createGameBoard).toHaveBeenCalled();
+                    done();
+
                 }, 100);
 
             });
 
-            it('start button should be set on click event to call runGame method from Controller', ()=>{
+            it('start button should be set on click event to call runGame method from Controller', (done)=>{
 
                 game.setParams({
                     surfaceWidth : 400,
@@ -392,6 +276,7 @@ describe('Bootstrap', ()=>{
 
                     buttonNode.click();
                     expect(Controller.prototype.runGame).toHaveBeenCalled();
+                    done();
 
                 }, 150);
 
@@ -402,7 +287,14 @@ describe('Bootstrap', ()=>{
         it('on incorrect settings should throw exception', ()=>{
 
             game.setParams();
-            expect(game.run).toThrow();
+
+            try{
+                expect(game.run()).toThrow();
+            }
+            catch(e){
+                document.body.insertAdjacentHTML( 'afterbegin', '<div id="gameBox"></div>');
+            }
+
         });
 
 

@@ -75,8 +75,7 @@ describe('GameBoard', ()=>{
     });
 
     afterEach(()=>{
-        document.body.innerHTML = '';
-        gameBoard = null;
+        document.body.removeChild(document.getElementById('gameBox'));
     });
 
 

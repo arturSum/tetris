@@ -1,7 +1,7 @@
 
 
+const EventEmitter = ()=>{
 
-const EventEmitter = (() => {
 
     var _eventsMap = new Map(),
         _observersList = new Set(),
@@ -14,13 +14,14 @@ const EventEmitter = (() => {
             return deletedValue
         },
         _noRegisteredEventsError = eventId => {
-            console.error(`${eventId} not registered`);
+            console.info(`${eventId} not registered`);
         };
+
 
 
     return{
 
-        subscribe : (eventId, observerObj) => {
+        subscribe(eventId, observerObj){
 
             if(_eventsMap.has(eventId)){
                 _observersList = _popElement(_eventsMap, eventId);
@@ -30,8 +31,7 @@ const EventEmitter = (() => {
             _eventsMap.set(eventId, _observersList);
         },
 
-
-        detach : (eventId, observerObj) => {
+        detach(eventId, observerObj){
 
             if(_eventsMap.has(eventId)){
 
@@ -45,7 +45,7 @@ const EventEmitter = (() => {
             _noRegisteredEventsError(eventId);
         },
 
-        notifyObservers : (eventId, additionalParam = []) => {
+        notifyObservers(eventId, additionalParam = []){
 
             if(_eventsMap.has(eventId)){
 
@@ -58,8 +58,11 @@ const EventEmitter = (() => {
 
             _noRegisteredEventsError(eventId);
         }
+
     }
 
-})();
 
-export {EventEmitter};
+};
+
+export default EventEmitter
+

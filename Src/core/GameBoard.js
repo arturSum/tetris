@@ -1,9 +1,7 @@
 
 class GameBoard{
 
-
-        constructor(config, controllerHandle){
-
+    constructor(config, controllerHandle){
 
         this.boardNodeHandler = config.mainBoardCanvasDOMHandle;
 
@@ -13,15 +11,13 @@ class GameBoard{
         this.boardWidth = config.surfaceWidth;
         this.boardHeight = this.boardWidth + (this.boardWidth*this.boardGameProportion);
 
-
         this.ctx = config.mainBoardCanvasDOMHandle.getContext('2d');
 
-                this.boardMesh = [];
+        this.boardMesh = [];
 
+        this.controllerHandle = controllerHandle;
 
-                        this.controllerHandle = controllerHandle;
-
-                this.tetrinoBlock = this.controllerHandle.getNewTetrino();
+        this.tetrinoBlock = this.controllerHandle.getNewTetrino();
         this.tetrinoColors = this.controllerHandle.getTetrinoAvailableColors();
 
         this.tetrinoBlock.pos.x = this.countStartingXPos();
@@ -36,7 +32,7 @@ class GameBoard{
         this.ctx.fillStyle = 'black';
         this.ctx.fillRect(0, 0, this.boardWidth, this.boardHeight);
 
-            }
+    }
 
     createMesh(){
 
@@ -53,7 +49,6 @@ class GameBoard{
         }
 
     }
-
 
     clearMesh(){
 
@@ -87,9 +82,7 @@ class GameBoard{
 
     }
 
-
-
-            changeXAxisBlockPosition(movingStep = 1){
+    changeXAxisBlockPosition(movingStep = 1){
 
         this.tetrinoBlock.pos.x += movingStep;
 
