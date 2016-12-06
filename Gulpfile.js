@@ -63,7 +63,7 @@ gulp.task('build:transpile', ['build:clear-source'], ()=>{
  */
 gulp.task('build:del-node-folder', ()=>{
 
-    del('todel').then(()=>{
+    del('node_modules').then(()=>{
         console.log('node_modules deleted');
     });
 

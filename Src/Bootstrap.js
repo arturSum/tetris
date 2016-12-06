@@ -1,7 +1,18 @@
 import {Controller} from './core/Controller'
+
+
+
+
+
 import EventEmitter from './helpers/EventEmitter'
 
 import AObserver from './helpers/Observers/AObserver'
+
+
+
+
+
+
 
 
 var Bootstrap = (()=>{
@@ -76,16 +87,16 @@ var Bootstrap = (()=>{
 
         startUpGame = (gameProp, eventEmitter)=>{
 
-                var controllerInstance = new Controller(gameProp, eventEmitter);
+            var controllerInstance = new Controller(gameProp, eventEmitter);
 
-                gameProp.startButtonDOMHandle.addEventListener('click', ()=>{
+            gameProp.startButtonDOMHandle.addEventListener('click', ()=>{
                     controllerInstance.runGame();
-                });
+            });
 
-                controllerInstance.createGameBoard().
-                                   createGameStatusBoard().
-                                   createGameBoardMesh().
-                                   setBlockMovingEvents();
+            controllerInstance.createGameBoard().
+                               createGameStatusBoard().
+                               createGameBoardMesh().
+                               setBlockMovingEvents();
 
         };
 
